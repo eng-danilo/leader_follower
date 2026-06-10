@@ -7,8 +7,8 @@ import numpy as np
 import csv
 import yaml
 import cvxpy as cp
-from autonomy.GMPC.enum_class import TrajType
-from autonomy.GMPC.nonlinear_mpc import NonlinearMPC as nmpc
+
+from qcar2_controller.controller_config.nonlinear_mpc import NonlinearMPC as nmpc
 
 # ROS specific packages
 from rclpy.duration import Duration # Handles time for ROS 2

@@ -7,7 +7,7 @@ import numpy as np
 import csv
 import yaml
 import cvxpy as cp
-from autonomy.GMPC.gmpc_ackermann import GeometricMPC_ackermann as gmpc_ackermann
+from qcar2_controller.controller_config.gmpc_ackermann import GeometricMPC_ackermann as gmpc_ackermann
 
 # ROS specific packages
 from rclpy.duration import Duration # Handles time for ROS 2

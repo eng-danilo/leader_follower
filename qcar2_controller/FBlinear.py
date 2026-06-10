@@ -7,8 +7,7 @@ import numpy as np
 import csv
 import yaml
 import cvxpy as cp
-from autonomy.GMPC.feedback_linearization import FBLinearizationController as FBlinear
-from autonomy.GMPC.enum_class import TrajType
+from qcar2_controller.controller_config.feedback_linearization import FBLinearizationController as FBlinear
 
 # ROS specific packages
 from rclpy.duration import Duration # Handles time for ROS 2
