@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 from glob import glob
 import os
 
-package_name = 'qcar2_controller'
+package_name = 'leader_follower'
 
 setup(
     name=package_name,
@@ -23,14 +23,14 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pure_pursuit = qcar2_controller.pure_pursuit:main',
-            'NMPC = qcar2_controller.NMPC:main',
-            'GMPC_phi = qcar2_controller.GMPC_phi:main',
-            'GMPC_ackermann = qcar2_controller.GMPC_ackermann:main',
-            'leader_trajectory_eight = qcar2_controller.leader_trajectory_eight:main',
-            'leader_trajectory = qcar2_controller.leader_trajectory:main',
-            'planner = qcar2_controller.path_planner:main',
-            'FBlinear = qcar2_controller.FBlinear:main',
+            'pure_pursuit = leader_controller.pure_pursuit:main',
+            'NMPC = follower_controller.NMPC:main',
+            'GMPC_phi = follower_controller.GMPC_phi:main',
+            'GMPC_ackermann = follower_controller.GMPC_ackermann:main',
+            'leader_trajectory_eight = leader_controller.leader_trajectory_eight:main',
+            'leader_trajectory = leader_controller.leader_trajectory:main',
+            'planner = leader_controller.path_planner:main',
+            'FBlinear = follower_controller.FBlinear:main',
         ],
     },
 )
