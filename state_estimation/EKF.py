@@ -196,6 +196,7 @@ class EKF(Node):
       self.states_hat[1] += y_dot * self.dt
       self.states_hat[2] = self.wrap_angle(yaw + yaw_dot * self.dt)
       self.states_hat[3] += self.steering_angle_rate * self.dt
+      self.states_hat[3] = np.clip(self.states_hat[3], -np.deg2rad(25.0), np.deg2rad(25.0))  # Limit steering angle to [-30, 30] degrees
 
     def predict_covariance(self, states_prev):
       x, y, yaw, steering_angle = states_prev
@@ -259,6 +260,7 @@ class EKF(Node):
 
       self.states_hat += K @ y  # Update state estimate
       self.states_hat[2] = self.wrap_angle(self.states_hat[2])  # Wrap yaw estimate
+      self.states_hat[3] = np.clip(self.states_hat[3], -np.deg2rad(25.0), np.deg2rad(25.0))  # Limit steering angle to [-30, 30] degrees
       self.steering_angle_rate = (
                                   self.command_steering_angle - self.states_hat[3]
                               ) / self.tau_phi

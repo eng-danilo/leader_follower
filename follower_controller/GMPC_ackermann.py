@@ -90,8 +90,8 @@ class GMPC_ackermann_node(Node):
         self.controller.setup_solver(self.Q, self.R, self.N)
         v_min = -1.75
         v_max = 1.75
-        phi_min = -np.deg2rad(25)
-        phi_max = np.deg2rad(25)
+        phi_min = -np.deg2rad(26)
+        phi_max = np.deg2rad(26)
         self.controller.set_control_bound(v_min, v_max, phi_min, phi_max)
 
         # =========================================================
