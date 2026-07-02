@@ -203,10 +203,10 @@ class Path_planner(Node):
           10
       )
       self.subscription_steering_angle = self.create_subscription(
-          Float32,
-          '/qcar2_2/current_steering_angle',
+          Odometry,
+          '/qcar2_2/estimated_states',
           self.leader_steering_angle_callback,
-            10
+            1
       )
 
       self.get_logger().info("Path planner node has been started.")
@@ -219,8 +219,9 @@ class Path_planner(Node):
       else:
         self.get_logger().info("User called START")
 
-    def leader_steering_angle_callback(self, msg: Float32):
-      self.leader_steering = msg.data
+    def leader_steering_angle_callback(self, msg: Odometry):
+      self.leader_steering = msg.twist.twist.angular.x  # Assuming the steering angle is stored in angular.x of the Odometry message
+      self.leader_steering_dot = msg.twist.twist.angular.y  # Assuming the steering angle rate is stored in angular.y of the Odometry message
 
     def leader_pose_callback(self, msg):
       x = msg.pose.position.x
@@ -268,8 +269,7 @@ class Path_planner(Node):
         v_sign = np.sign(vx * np.cos(ref_state[2]) + vy * np.sin(ref_state[2]))
         v = v_mag * v_sign
         phi = self.leader_steering
-        _,_,_,prev_phi = self.leaderbuffer[-1][0] if len(self.leaderbuffer) > 0 else (0,0,0,phi)
-        phi_dot = (phi - prev_phi) / self.dt
+        phi_dot = self.leader_steering_dot 
         ref_state = np.array([ref_state[0], ref_state[1], ref_state[2], phi])
         ref_control = np.array([v,omega, phi_dot])
         self.leaderbuffer.append((ref_state, ref_control))

@@ -7,7 +7,7 @@ import numpy as np
 import csv
 import yaml
 import cvxpy as cp
-from qcar2_controller.controller_config.gmpc_ackermann import GeometricMPC_ackermann as gmpc_ackermann
+from follower_controller.controller_config.gmpc_ackermann import GeometricMPC_ackermann as gmpc_ackermann
 
 # ROS specific packages
 from rclpy.duration import Duration # Handles time for ROS 2
@@ -90,8 +90,8 @@ class GMPC_ackermann_node(Node):
         self.controller.setup_solver(self.Q, self.R, self.N)
         v_min = -1.75
         v_max = 1.75
-        phi_min = -0.5
-        phi_max = 0.5
+        phi_min = -np.deg2rad(25)
+        phi_max = np.deg2rad(25)
         self.controller.set_control_bound(v_min, v_max, phi_min, phi_max)
 
         # =========================================================
@@ -148,6 +148,13 @@ class GMPC_ackermann_node(Node):
         #     self.follower_velocity_callback,
         #     QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT, depth=10)
         # )
+
+        self.subscription_steering_angle = self.create_subscription(
+            Odometry,
+            'estimated_states',
+            self.steering_angle_callback,
+            1
+        )
 
         self.subscription_stop_flag = self.create_subscription(
             Bool,
@@ -340,9 +347,8 @@ class GMPC_ackermann_node(Node):
       QCarCommands.angular.z = steering_angle
       self.publisher.publish(QCarCommands)
 
-    def calculate_current_steering(self):
-       a_phi = 1.0 - np.exp(-self.dt / self.steering_time_constant)
-       self.current_steering_angle = self.current_steering_angle + a_phi * (self.desired_steering_angle - self.current_steering_angle)
+    def steering_angle_callback(self, msg: Odometry):
+      self.current_steering_angle = msg.twist.twist.angular.x  # Assuming the steering angle is stored in angular.x of the Odometry message
        
     
       

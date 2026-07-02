@@ -30,6 +30,18 @@ def generate_launch_description():
             ['vrpn_mocap/Qcar2_', qcarnumber, '/pose']   # becomes /qcar2/vrpn_mocap/Qcar2_2/pose under the namespace
         )]
     )
+
+    EKF = Node(
+        package='leader_follower',
+        executable='EKF',
+        name='EKF',
+        parameters=[{'qcarnumber': qcarnumber}],
+        remappings=[(
+            'vrpn',
+            ['vrpn_mocap/Qcar2_', qcarnumber]   # becomes /qcar2/vrpn_mocap/Qcar2_2/pose under the namespace
+        )]
+    )
+
     nav2_qcar2_converter = Node(
         package='qcar2_nodes',
         executable='nav2_qcar2_converter',
@@ -66,6 +78,7 @@ def generate_launch_description():
         leader_trajectory_eight,
         nav2_qcar2_converter,
         qcar2_hardware,
+        EKF,
     ])
 # then return LaunchDescription([... , group])
 

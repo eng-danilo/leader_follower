@@ -56,6 +56,16 @@ def generate_launch_description():
             }
         ]
     )
+    EKF = Node(
+        package='leader_follower',
+        executable='EKF',
+        name='EKF',
+        parameters=[{'qcarnumber': qcarnumber}],
+        remappings=[(
+            'vrpn',
+            ['vrpn_mocap/Qcar2_', qcarnumber]   # becomes /qcar2/vrpn_mocap/Qcar2_2/pose under the namespace
+        )]
+    )
 
     qcar2_hardware = Node(
         package='qcar2_nodes',
@@ -80,7 +90,8 @@ def generate_launch_description():
         GMPC_ackermann,
         planner,
         nav2_qcar2_converter,
-        qcar2_hardware
+        qcar2_hardware,
+        EKF
     ])
 # then return LaunchDescription([... , group])
 

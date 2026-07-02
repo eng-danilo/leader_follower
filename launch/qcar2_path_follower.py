@@ -50,6 +50,18 @@ def generate_launch_description():
         name='qcar2_hardware',
         parameters=[{'qcarnumber': qcarnumber}]
     )
+
+    EKF = Node(
+        package='leader_follower',
+        executable='EKF',
+        name='EKF',
+        parameters=[{'qcarnumber': qcarnumber}],
+        remappings=[(
+            'vrpn',
+            ['vrpn_mocap/Qcar2_', qcarnumber]   # becomes /qcar2/vrpn_mocap/Qcar2_2/pose under the namespace
+        )]
+    )
+
     vrpn_client_launch = IncludeLaunchDescription(
         AnyLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -67,6 +79,7 @@ def generate_launch_description():
         pure_pursuit,
         nav2_qcar2_converter,
         qcar2_hardware,
+        EKF,
     ])
 # then return LaunchDescription([... , group])
 
