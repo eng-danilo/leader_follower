@@ -1,0 +1,9 @@
+traj_config:
+  type: CIRCLE_LEADER_FOLLOWER
+  param:
+    start_state: [x0, y0, 0.0]
+    middle_state: [0.0, y0, 0.0]
+    linear_vel: 0.50
+    angular_vel: 0.1
+    radius: 1.0
+    dt: dt
