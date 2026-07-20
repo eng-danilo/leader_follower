@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 from glob import glob
 import os
 
-package_name = 'leader_follower'
+package_name = 'generate_data'
 
 setup(
     name=package_name,
@@ -23,15 +23,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'pure_pursuit = leader_controller.pure_pursuit:main',
-            'NMPC = follower_controller.NMPC:main',
-            'GMPC_phi = follower_controller.GMPC_phi:main',
-            'GMPC_ackermann = follower_controller.GMPC_ackermann:main',
-            'leader_trajectory_eight = leader_controller.leader_trajectory_eight:main',
-            'leader_trajectory = leader_controller.leader_trajectory:main',
-            'planner = follower_controller.path_planner:main',
-            'FBlinear = follower_controller.FBlinear:main',
-            'EKF = state_estimation.EKF:main',
+            'experiment_forward_speed = generate_data.experiment_forward_speed:main',
         ],
     },
 )

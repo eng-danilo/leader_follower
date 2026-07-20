@@ -20,16 +20,21 @@ def generate_launch_description():
     )
     qcarnumber = LaunchConfiguration('qcarnumber')
 
-    config_dir = "/home/nvidia/ros2/src/leader_follower/config"
-    
-    GMPC_ackermann = Node(
-        package='leader_follower',
-        executable='GMPC_ackermann',
-        name='GMPC_ackermann',
+    speed_arg = DeclareLaunchArgument(
+    'speed',
+    default_value='0.0',
+    description='Forward speed/PWM command'
+    )
+    speed = LaunchConfiguration('speed')
+
+    experiment_forward_speed = Node(
+        package='generate_data',
+        executable='experiment_forward_speed',
+        name='experiment_forward_speed',
         parameters=[
         {
             'qcarnumber': qcarnumber,
-            'config_dir': config_dir,
+            'speed': speed,
         }
         ],
         remappings=[(
@@ -42,32 +47,6 @@ def generate_launch_description():
         executable='nav2_qcar2_converter',
         name='nav2_qcar2_converter',
         parameters=[{'qcarnumber': qcarnumber}]
-    )
-
-    planner = Node(
-        package='leader_follower',
-        executable='planner',
-        name='planner',
-        parameters=[
-            {
-                'qcarnumber': qcarnumber,
-                'controller_type': 'GMPC_ackermann',
-                'config_dir': config_dir
-            }
-        ]
-    )
-    EKF = Node(
-        package='leader_follower',
-        executable='EKF',
-        name='EKF',
-        parameters=[{'qcarnumber': qcarnumber}],
-        remappings=[(
-            'vrpn/twist',
-            ['vrpn_mocap/Qcar2_', qcarnumber, '/twist']   # becomes /qcar2/vrpn_mocap/Qcar2_2/twist under the namespace
-        ), (
-            'vrpn/pose',
-            ['vrpn_mocap/Qcar2_', qcarnumber, '/pose']
-        )]
     )
 
     qcar2_hardware = Node(
@@ -90,11 +69,9 @@ def generate_launch_description():
     group = GroupAction([
         PushRosNamespace(['qcar2_', qcarnumber]),    
         vrpn_client_launch,      
-        GMPC_ackermann,
-        planner,
+        experiment_forward_speed,
         nav2_qcar2_converter,
         qcar2_hardware,
-        EKF
     ])
 # then return LaunchDescription([... , group])
 
